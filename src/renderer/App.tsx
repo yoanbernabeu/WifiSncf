@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import type { TrainData, TrainStop } from "../shared/types/train";
 import { StopItem } from "./components/StopItem";
 import { TrainMap } from "./components/TrainMap";
+import { InfoTab } from "./components/InfoTab";
 
-type Tab = "trajet" | "carte";
+type Tab = "trajet" | "carte" | "infos";
 
 export function App() {
   const [data, setData] = useState<TrainData | null>(null);
@@ -48,10 +49,13 @@ export function App() {
   const arrival = details.stops[details.stops.length - 1];
   const nextIdx = details.stops.findIndex((s) => new Date(s.realDate) > now);
   const nextStop = nextIdx >= 0 ? details.stops[nextIdx] : null;
-  const speed = gps ? Math.round(gps.speed * 3.6) : null; // m/s → km/h
+  const speed = gps ? Math.round(gps.speed * 3.6) : null; // m/s -> km/h
 
-  const passedCount = nextIdx >= 0 ? nextIdx : details.stops.length;
-  const progress = Math.round((passedCount / (details.stops.length - 1)) * 100);
+  // Progression reelle depuis l'API
+  const apiProgress = nextStop?.progress ?? departure?.progress;
+  const progress = apiProgress
+    ? Math.round(apiProgress.progressPercentage)
+    : Math.round(((nextIdx >= 0 ? nextIdx : details.stops.length) / (details.stops.length - 1)) * 100);
 
   const fmtMB = (kb: number) => {
     if (kb >= 1_000_000) return `${(kb / 1_000_000).toFixed(1)} Go`;
@@ -106,20 +110,23 @@ export function App() {
         >
           Carte
         </button>
+        <button
+          className={`tab ${tab === "infos" ? "active" : ""}`}
+          onClick={() => setTab("infos")}
+        >
+          Infos
+        </button>
       </div>
 
       {/* Tab content */}
-      {tab === "trajet" ? (
+      {tab === "trajet" && (
         <>
-          {/* Alert */}
           {details.events.length > 0 && (
             <div className="alert">
               <span className="alert-dot" />
               {details.events[0].text}
             </div>
           )}
-
-          {/* Timeline */}
           <div className="timeline">
             {details.stops.map((stop: TrainStop, i: number) => (
               <StopItem
@@ -131,10 +138,16 @@ export function App() {
             ))}
           </div>
         </>
-      ) : (
+      )}
+
+      {tab === "carte" && (
         <div className="map-container">
           <TrainMap gps={gps} stops={details.stops} graph={graph} />
         </div>
+      )}
+
+      {tab === "infos" && (
+        <InfoTab gps={gps} details={details} connection={connection} />
       )}
 
       {/* Footer */}

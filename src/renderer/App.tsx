@@ -51,8 +51,8 @@ export function App() {
   const nextStop = nextIdx >= 0 ? details.stops[nextIdx] : null;
   const speed = gps ? Math.round(gps.speed * 3.6) : null; // m/s -> km/h
 
-  // Progression reelle depuis l'API
-  const apiProgress = nextStop?.progress ?? departure?.progress;
+  // Progression reelle depuis l'API (le depart contient la progression globale)
+  const apiProgress = departure?.progress;
   const progress = apiProgress
     ? Math.round(apiProgress.progressPercentage)
     : Math.round(((nextIdx >= 0 ? nextIdx : details.stops.length) / (details.stops.length - 1)) * 100);

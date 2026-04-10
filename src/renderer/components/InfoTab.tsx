@@ -36,9 +36,8 @@ function formatTime(ts: number): string {
 }
 
 export function InfoTab({ gps, details, connection }: InfoTabProps) {
-  const now = new Date();
-  const nextStop = details.stops.find((s) => new Date(s.realDate) > now);
-  const progress = nextStop?.progress ?? details.stops[0]?.progress;
+  // Le premier arret (depart) contient la progression globale du trajet
+  const progress = details.stops[0]?.progress;
 
   return (
     <div className="info-tab">

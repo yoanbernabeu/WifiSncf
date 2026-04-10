@@ -2,6 +2,12 @@
 
 Application macOS menu bar qui affiche les informations de votre train SNCF en temps reel, directement depuis le WiFi embarque.
 
+## Screenshots
+
+| Trajet | Carte | Infos |
+|:---:|:---:|:---:|
+| ![Trajet](screen1.png) | ![Carte](screen2.png) | ![Infos](screen3.png) |
+
 ## Fonctionnalites
 
 ### Onglet Trajet

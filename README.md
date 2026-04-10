@@ -4,12 +4,29 @@ Application macOS menu bar qui affiche les informations de votre train SNCF en t
 
 ## Fonctionnalites
 
-- **Vitesse en temps reel** du train (GPS)
-- **Retards** et raison du retard
-- **Liste des arrets** avec horaires theoriques et reels
-- **Carte interactive** avec le trace complet du trajet et la position du train
-- **Statut WiFi** avec consommation data
-- **Apparait au survol** de la zone sous le notch
+### Onglet Trajet
+- **Vitesse en temps reel** du train (GPS, conversion m/s → km/h)
+- **Retards** avec raison et horaires theoriques barres
+- **Timeline des arrets** avec indicateur de progression (passe / en cours / a venir)
+- **Barre de progression** du trajet (% reel depuis l'API)
+- **Alertes** en cas de perturbation
+
+### Onglet Carte
+- **Carte interactive** (Leaflet + CartoDB Dark) avec le trace GeoJSON complet
+- **Position du train** en temps reel sur la carte
+- **Marqueurs des gares** avec tooltip au survol
+- **Noms des terminus** affiches en permanence
+
+### Onglet Infos
+- **Distances** : parcourue, restante, progression en %
+- **Position GPS** : altitude, direction (boussole), coordonnees, nombre de satellites
+- **Services a bord** : bar, WiFi, prises electriques, espace famille, etc.
+- **Details WiFi** : bande passante, classe de service, reset du quota
+
+### General
+- **Widget flottant** qui apparait au survol de la zone sous le notch
+- **Statut WiFi** en pied de page avec consommation data
+- **Rafraichissement automatique** toutes les 15 secondes
 
 ## APIs utilisees
 
@@ -17,10 +34,10 @@ L'application interroge les APIs du portail `wifi.sncf` (accessibles uniquement 
 
 | Endpoint | Description |
 |---|---|
-| `/router/api/train/details` | Numero du train, arrets, horaires, retards |
-| `/router/api/train/gps` | Position GPS, vitesse, cap, altitude |
+| `/router/api/train/details` | Numero du train, arrets, horaires, retards, services, progression |
+| `/router/api/train/gps` | Position GPS, vitesse, cap, altitude, satellites |
 | `/router/api/train/graph` | Trace GeoJSON complet du trajet |
-| `/router/api/connection/status` | Statut WiFi, bande passante, data |
+| `/router/api/connection/status` | Statut WiFi, bande passante, quota data |
 
 ## Stack technique
 
@@ -28,7 +45,7 @@ L'application interroge les APIs du portail `wifi.sncf` (accessibles uniquement 
 - **TypeScript**
 - **React**
 - **Vite**
-- **Leaflet** (carte OpenStreetMap / CartoDB)
+- **Leaflet** (carte CartoDB Dark)
 - **Axios** (requetes HTTP)
 
 ## Installation
